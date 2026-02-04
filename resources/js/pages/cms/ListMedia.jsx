@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Button, message, Card, Row, Col, Table, Tag, Modal, Progress, Typography, Space } from 'antd';
 import { UploadOutlined, EyeOutlined, PlayCircleOutlined, DeleteOutlined, InboxOutlined } from '@ant-design/icons';
 import ReactPlayer from 'react-player';
-import axios from 'axios';
 import MainLayout from '../../layouts/MainLayout';
+import axios from 'axios';
+import { router } from '@inertiajs/react';
 
 const { Text } = Typography;
 const { Dragger } = Upload;
 
-const ListMedia = () => {
+const ListMedia = ({ mediaList }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -21,7 +22,6 @@ const ListMedia = () => {
 
 
   const handleFileChange = (info) => {
-    // Ambil file asli
     const file = info.file.originFileObj || info.file;
 
     if (file) {
@@ -55,8 +55,34 @@ const ListMedia = () => {
     setIsUploading(true);
     setUploadProgress(0);
 
+    try {
+      await axios.post('/upload-media', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percent);
+        }
+      });
 
+      message.success('File terkirim! Sedang diproses server...');
+
+      handleCancelUpload();
+
+      router.reload({ only: ['mediaList'] });
+
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.status === 413) {
+        message.error('File terlalu besar! Cek php.ini');
+      } else {
+        message.error('Gagal Upload! Cek koneksi atau server.');
+      }
+    } finally {
+      setIsUploading(false);
+      setTimeout(() => setUploadProgress(0), 1000);
+    }
   };
+
 
   const handleCancelUpload = () => {
     if (localPreview.url) URL.revokeObjectURL(localPreview.url);
@@ -73,7 +99,7 @@ const ListMedia = () => {
           <img src={ record.url } alt="thumb" style={ { width: 40, height: 40, objectFit: 'cover', borderRadius: 4 } } />
       ),
     },
-    { title: 'Nama File', dataIndex: 'name', key: 'name', ellipsis: true },
+    { title: 'Nama File', dataIndex: 'judul_media', key: 'name', ellipsis: true },
     {
       title: 'Tipe',
       dataIndex: 'type',
@@ -166,8 +192,8 @@ const ListMedia = () => {
         </Col>
 
         <Col xs={ 24 } md={ 14 }>
-          <Card title="List Media di Server" className="shadow-sm">
-            <Table columns={ columns } dataSource={ data } rowKey="id" loading={ loading } pagination={ { pageSize: 6 } } />
+          <Card title="List Media" className="shadow-sm">
+            <Table columns={ columns } dataSource={ mediaList } rowKey="id" loading={ loading } pagination={ { pageSize: 6 } } />
           </Card>
         </Col>
       </Row>
