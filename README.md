@@ -1,5 +1,3 @@
-<img width="1916" height="913" alt="image" src="https://github.com/user-attachments/assets/dffe9668-4757-472f-ae7b-d10a241f86ec" /># 🖥️ Websocket CMS Player
-
 ![Project Status](https://img.shields.io/badge/Status-Active-success)
 ![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
