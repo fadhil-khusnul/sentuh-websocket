@@ -1,4 +1,4 @@
-# 🖥️ Websocket CMS Player
+<img width="1916" height="913" alt="image" src="https://github.com/user-attachments/assets/dffe9668-4757-472f-ae7b-d10a241f86ec" /># 🖥️ Websocket CMS Player
 
 ![Project Status](https://img.shields.io/badge/Status-Active-success)
 ![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
@@ -17,6 +17,9 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 
  
 ## 📸 Demo Preview
+<img width="1916" height="913" alt="image" src="https://github.com/user-attachments/assets/e9661c4c-05b2-4d93-b963-352e53597f52" />
+
+
 
 [![Tonton Demo Video](https://img.shields.io/badge/▶_Klik_Disini_Untuk_Menonton_Demo-000?style=for-the-badge&logo=youtube&logoColor=red)](https://drive.google.com/file/d/1lNwPQxeWP3EbI10YkjsBdzXDdc7eu3RC/view?usp=sharing)
 
