@@ -2,177 +2,237 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-import { notification, Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { notification, Carousel, Progress, Typography } from 'antd';
+import { LoadingOutlined, CloudDownloadOutlined } from '@ant-design/icons';
 
 const MediaPlayer = () => {
-  const [playlist, setPlaylist] = useState([]);
-  const [currentMedia, setCurrentMedia] = useState(null);
-  const [isDownloading, setIsDownloading] = useState(false);
-
   const [api, contextHolder] = notification.useNotification();
+
+  const [activePackage, setActivePackage] = useState(null);
+
+  const [runningText, setRunningText] = useState("SELAMAT DATANG DI SENTUH DIGITAL SIGNAGE");
 
   useEffect(() => {
     const appKey = import.meta.env.VITE_REVERB_APP_KEY;
-    const wsHost = import.meta.env.VITE_REVERB_HOST || 'localhost';
     const wsPort = import.meta.env.VITE_REVERB_PORT || 8080;
-
-    console.log("🔑 Menggunakan App Key:", appKey);
 
     window.Pusher = Pusher;
 
     const echo = new Echo({
-      broadcaster: 'reverb',
-      key: appKey,
-      wsHost: wsHost,
-      wsPort: wsPort,
-      wssPort: wsPort,
-      forceTLS: false,
-      encrypted: false,
-      disableStats: true,
-      enabledTransports: ['ws'],
-      cluster: 'mt1'
+        broadcaster: 'reverb',
+        key: appKey,
+        wsHost: 'localhost',
+        wsPort: wsPort,
+        wssPort: wsPort,
+        forceTLS: false,
+        encrypted: false,
+        disableStats: true,
+        enabledTransports: ['ws'],
+        cluster: 'mt1'
     });
 
+    echo.connector.pusher.connection.bind('connected', () => {
+      api.success({ message: 'Online', description: 'Terhubung ke server.', duration: 2 });
+    });
 
     const channel = echo.channel('media-channel');
-
-    channel.listen('.media.uploaded', (newMedia) => {
-      console.log("🔥 EVENT DITERIMA:", newMedia);
-
-      api.info({
-        message: 'Media Baru Diterima',
-        description: newMedia.judul_media,
-        placement: 'topRight',
-      });
-
-      handleNewContent(newMedia);
+    channel.listen('.media.uploaded', (eventData) => {
+        console.log("🔥 EVENT MASUK:", eventData);
+        handleNewContent(eventData);
     });
 
-    fetchPlaylist();
+    fetchInitialContent();
 
     return () => echo.disconnect();
   }, []);
 
-  const fetchPlaylist = async () => {
+
+  const fetchInitialContent = async () => {
     try {
-      const baseURL = 'http://localhost:8000';
-      const res = await axios.get(`${baseURL}/get-playlist`);
-      const serverList = res.data;
-      processDownloadQueue(serverList);
+      const res = await axios.get('http://localhost:8000/get-playlist');
+      const playlist = res.data;
+
+      if (playlist.length > 0) {
+        const content = playlist[0];
+        const formattedData = {
+            id: content.id,
+            judul_media: content.name,
+            running_text: content.running_text,
+            video_url: content.video_url,
+            images_url: content.images_url
+        };
+        await handleNewContent(formattedData);
+      }
     } catch (err) {
       console.error("Gagal fetch playlist", err);
     }
   };
 
-  const handleNewContent = (mediaData) => {
-    const newItem = {
-      id: mediaData.id,
-      name: mediaData.judul_media || `media-${mediaData.id}`,
-      type: mediaData.type,
-      url: mediaData.url,
-      local_path: null
-    };
+  const handleNewContent = async (mediaData) => {
+      const notificationKey = 'download_progress';
 
-    setPlaylist(prev => [newItem, ...prev]);
+      api.open({
+          key: notificationKey,
+          message: 'Mengunduh Konten Baru...',
+          description: (
+            <div style={{ marginTop: 8 }}>
+                <div style={{ marginBottom: 5 }}>{mediaData.judul_media}</div>
+                <Progress percent={0} status="active" size="small" />
+            </div>
+          ),
+          icon: <CloudDownloadOutlined style={{ color: '#1890ff' }} />,
+          duration: 0,
+      });
 
-    const key = `open${Date.now()}`;
-    api.open({
-      title: 'Mendownload Konten...',
-      description: newItem.name,
-      icon: <Spin indicator={ <LoadingOutlined spin /> } />,
-      key,
-      duration: 0,
-    });
+      try {
+          await preloadAssets(mediaData, (percent) => {
+              api.open({
+                  key: notificationKey,
+                  message: 'Mengunduh Konten Baru...',
+                  description: (
+                    <div style={{ marginTop: 8 }}>
+                        <div style={{ marginBottom: 5 }}>{mediaData.judul_media}</div>
+                        <Progress percent={percent} status="active" size="small" />
+                    </div>
+                  ),
+                  icon: <LoadingOutlined style={{ color: '#1890ff' }} />,
+                  duration: 0,
+              });
+          });
 
-    downloadSingleFile(newItem).then(localUrl => {
-      if (localUrl) {
-        newItem.local_path = localUrl;
-        setCurrentMedia(newItem);
+          setActivePackage(mediaData);
+          if (mediaData.running_text) setRunningText(mediaData.running_text);
 
-        api.success({
-          key,
-          title: 'Now Playing',
-          description: newItem.name,
-          duration: 4,
-        });
+          api.destroy(notificationKey);
+          api.success({
+              message: 'Now Playing',
+              description: mediaData.judul_media,
+              duration: 3
+          });
+
+      } catch (error) {
+          console.error("Gagal download aset:", error);
+          api.error({
+              key: notificationKey,
+              message: 'Gagal Memutar',
+              description: 'Gagal mengunduh aset media.'
+          });
       }
-    });
   };
 
-  const processDownloadQueue = async (list) => {
-    setIsDownloading(true);
-    const updatedList = [...list];
-
-    for (let i = 0; i < updatedList.length; i++) {
-      const item = updatedList[i];
-
-      if (window.dsAPI) {
-        try {
-          const localUrl = await window.dsAPI.downloadMedia(item.url, item.name);
-          updatedList[i].local_path = localUrl;
-
-          if (i === 0) {
-            setCurrentMedia(updatedList[i]);
-          }
-        } catch (e) {
-          console.error("Gagal download di Electron:", e);
-        }
-      } else {
-        if (i === 0) setCurrentMedia(item);
+  const preloadAssets = async (data, onProgress) => {
+      const assets = [];
+      if (data.video_url) assets.push(data.video_url);
+      if (data.images_url && Array.isArray(data.images_url)) {
+          assets.push(...data.images_url);
       }
-    }
-    setPlaylist(updatedList);
-    setIsDownloading(false);
+
+      let loadedCount = 0;
+      const total = assets.length;
+
+      const updateProgress = () => {
+          loadedCount++;
+          const percent = Math.round((loadedCount / total) * 100);
+          if (onProgress) onProgress(percent);
+      };
+
+      const promises = assets.map(url => {
+          return new Promise((resolve) => {
+              const isVideo = url.match(/\.(mp4|mov|ogg)$/i);
+              if (isVideo) {
+                  const vid = document.createElement('video');
+                  vid.src = url;
+                  vid.onloadeddata = () => { updateProgress(); resolve(); };
+                  vid.onerror = () => { updateProgress(); resolve(); };
+              } else {
+                  const img = new Image();
+                  img.src = url;
+                  img.onload = () => { updateProgress(); resolve(); };
+                  img.onerror = () => { updateProgress(); resolve(); };
+              }
+          });
+      });
+
+      await Promise.all(promises);
   };
-
-  const downloadSingleFile = async (item) => {
-    if (window.dsAPI) {
-      return await window.dsAPI.downloadMedia(item.url, item.name);
-    }
-    await new Promise(r => setTimeout(r, 1000));
-    return item.url;
-  };
-
-  if (!currentMedia) {
-    return (
-      <div style={ { backgroundColor: '#000', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff' } }>
-        { contextHolder }
-        <Spin indicator={ <LoadingOutlined style={ { fontSize: 48, color: 'white' } } spin /> } />
-        <h2 style={ { marginTop: 20 } }>{ isDownloading ? "Sinkronisasi Data..." : "Menunggu Sinyal..." }</h2>
-      </div>
-    );
-  }
-
-
 
   return (
-    <div style={ { backgroundColor: '#000', height: '100vh', width: '100vw', overflow: 'hidden' } }>
-      { contextHolder }
+    <div style={{ backgroundColor: '#000', height: '100vh', width: '100vw', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      {contextHolder}
 
-      <div style={ { position: 'absolute', top: 10, left: 10, color: 'lime', zIndex: 999, background: 'rgba(0,0,0,0.7)', padding: '5px 10px', borderRadius: 4, fontSize: 12 } }>
-        Showing: { currentMedia.name }
+      <div style={{ flex: 6, position: 'relative', background: '#111', overflow: 'hidden' }}>
+         {activePackage?.video_url ? (
+             <video
+                key={activePackage.video_url}
+                src={activePackage.video_url}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                autoPlay muted loop playsInline
+             />
+         ) : (
+             <div style={{height: '100%', display: 'flex', alignItems:'center', justifyContent:'center', color: '#555', flexDirection: 'column'}}>
+                 <LoadingOutlined style={{ fontSize: 40, marginBottom: 20 }} />
+                 <h3>Menunggu Video...</h3>
+             </div>
+         )}
       </div>
 
-      { currentMedia.type === 'video' ? (
-        <video
-          key={ currentMedia.local_path || currentMedia.url }
-          src={ currentMedia.local_path || currentMedia.url }
-          style={ { width: '100%', height: '100%', objectFit: 'contain' } }
-          autoPlay
-          loop
-          controls
-          muted
-          playsInline
-        />
-      ) : (
-        <img
-          key={ currentMedia.local_path || currentMedia.url }
-          src={ currentMedia.local_path || currentMedia.url }
-          style={ { width: '100%', height: '100%', objectFit: 'contain' } }
-          alt="Signage Content"
-        />
-      ) }
+      <div style={{ flex: 3.5, position: 'relative', background: '#222', overflow: 'hidden', borderTop: '4px solid #000' }}>
+         {activePackage?.images_url && activePackage.images_url.length > 0 ? (
+             <Carousel
+                autoplay
+                autoplaySpeed={3000}
+                speed={3000}
+                effect="fade"
+                dots={true}
+                pauseOnHover={false}
+             >
+                {activePackage.images_url.map((url, idx) => (
+                    <div key={idx}>
+                        <div style={{
+                            height: '35vh',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            background: '#000'
+                        }}>
+                            <img
+                                src={url}
+                                alt={`slide-${idx}`}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        </div>
+                    </div>
+                ))}
+             </Carousel>
+         ) : (
+            <div style={{height: '100%', display: 'flex', alignItems:'center', justifyContent:'center', color: '#555'}}>
+                 <h3>Menunggu Gambar...</h3>
+             </div>
+         )}
+      </div>
+
+      {/* 3. RUNNING TEXT (5%) */}
+      <div style={{ flex: 0.5, background: '#002140', display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap', borderTop: '4px solid #000' }}>
+          <div style={{
+              display: 'inline-block',
+              paddingLeft: '100%',
+              animation: 'marquee 15s linear infinite',
+              color: 'white', fontWeight: 'bold', fontSize: '1.5rem', textTransform: 'uppercase'
+          }}>
+              {runningText}
+          </div>
+      </div>
+
+      <style>{`
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+      `}</style>
     </div>
   );
 };

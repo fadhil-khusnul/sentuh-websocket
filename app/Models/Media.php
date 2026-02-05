@@ -10,8 +10,16 @@ class Media extends Model
   protected $table = 'media';
   protected $fillable = [
     'judul_media',
-    'file_path',
-    'type',
-    'is_active',
+    'deskripsi',
+    'running_text',
+    'video_path',
+    'images',
+    'status',
+    'is_active'
+  ];
+
+  protected $casts = [
+    'images' => 'array',
+    'is_active' => 'boolean',
   ];
 }
