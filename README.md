@@ -72,4 +72,10 @@ Ikuti langkah ini untuk menjalankan proyek di komputer lokal (Localhost).
 
 ### 1. Clone Repositori
 ```bash
-git clone
+git clone [https://github.com/fadhil-khusnul/sentuh-websocket.git](https://github.com/fadhil-khusnul/sentuh-websocket.git)
+cd sentuh-websocket
+
+
+
+
+
