@@ -1,8 +1,6 @@
-# 🖥️ Websocket CMS Player
-
-![Project Status](https://img.shields.io/badge/Status-Active-success)
-![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+# 🖥️ Websocket CMS Laravel (Sentuh.id Test)
+![Laravel12](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![Reverb](https://img.shields.io/badge/WebSocket-Reverb-blueviolet)
 ![Inertia](https://img.shields.io/badge/Inertia.js-purple?logo=inertia)
 
@@ -10,22 +8,25 @@
 
 ---
 
-## 📝 Tentang Tugas (Recruitment Task)
+## 📝 Tugas Rekrutmen
 
-Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rekrutmen Sentuh.id untuk saya (Fadhil Khusnul Hakim), berikut detail lainnya:
+Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rekrutmen [sentuh.id](https://sentuh.id) untuk saya (Fadhil Khusnul Hakim), berikut detail lainnya:
 
 
  
 ## 📸 Demo Preview
+<img width="1916" height="913" alt="image" src="https://github.com/user-attachments/assets/e9661c4c-05b2-4d93-b963-352e53597f52" />
 
-*(Ganti link di bawah ini dengan link GIF atau Video YouTube demo aplikasi kamu. Contoh: Screenshot dashboard dan Player yang sedang berubah otomatis)*
 
-![Dashboard Screenshot]()
-> *Sistem secara otomatis memicu pemutaran video di player detik itu juga setelah tombol "Play" ditekan di CMS.*
+
+[![Tonton Demo Video](https://img.shields.io/badge/▶_Klik_Disini_Untuk_Menonton_Demo-000?style=for-the-badge&logo=youtube&logoColor=red)](https://drive.google.com/file/d/1lNwPQxeWP3EbI10YkjsBdzXDdc7eu3RC/view?usp=sharing)
+
+> *Klik tombol di atas untuk melihat demo sistem
+
 
 ---
 
-## ✨ Fitur
+## Fitur
 
 * 🚀 **Real-time Broadcasting:** Menggunakan Laravel Reverb untuk komunikasi instan antara CMS dan Player.
 * 📂 **Drag & Drop Upload:** Upload media (MP4, JPG, PNG) dengan mudah menggunakan Ant Design Dragger.
@@ -40,10 +41,10 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Backend:**
-* **Framework:** Laravel 11
+* **Framework:** Laravel 12
 * **Database:** MySQL
 * **Broadcasting:** Laravel Reverb (WebSocket Server)
 
@@ -59,7 +60,7 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 
 ---
 
-## ⚙️ Persyaratan Sistem
+## Persyaratan Sistem
 
 Sebelum menjalankan, pastikan mesin kamu sudah terinstall:
 * PHP >= 8.2
@@ -69,10 +70,10 @@ Sebelum menjalankan, pastikan mesin kamu sudah terinstall:
 
 ---
 
-## 🚀 Cara Install & Menjalankan
+## Cara Install & Menjalankan
 
 ```bash
-git clone [https://github.com/fadhil-khusnul/sentuh-websocket.git](https://github.com/fadhil-khusnul/sentuh-websocket.git)
+git clone https://github.com/fadhil-khusnul/sentuh-websocket.git
 cd sentuh-websocket
 
 composer update
@@ -80,8 +81,3 @@ composer update
 npm run install
 
 composer run dev
-
-
-
-
-
