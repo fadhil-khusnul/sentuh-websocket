@@ -211,7 +211,8 @@ register.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     
     register.form = registerForm
 /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
 export const home = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -225,7 +226,8 @@ home.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
 home.url = (options?: RouteQueryOptions) => {
@@ -233,7 +235,8 @@ home.url = (options?: RouteQueryOptions) => {
 }
 
 /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
 home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -241,7 +244,8 @@ home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
 home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -250,7 +254,8 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
     const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -259,7 +264,8 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
         homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -267,7 +273,8 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
- * @see routes/web.php:7
+* @see \App\Http\Controllers\MediaController::home
+ * @see app/Http/Controllers/MediaController.php:14
  * @route '/'
  */
         homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -281,74 +288,3 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
         })
     
     home.form = homeForm
-/**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-export const dashboard = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: dashboard.url(options),
-    method: 'get',
-})
-
-dashboard.definition = {
-    methods: ["get","head"],
-    url: '/dashboard',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-dashboard.url = (options?: RouteQueryOptions) => {
-    return dashboard.definition.url + queryParams(options)
-}
-
-/**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: dashboard.url(options),
-    method: 'get',
-})
-/**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: dashboard.url(options),
-    method: 'head',
-})
-
-    /**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-    const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: dashboard.url(options),
-        method: 'get',
-    })
-
-            /**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-        dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: dashboard.url(options),
-            method: 'get',
-        })
-            /**
- * @see routes/web.php:14
- * @route '/dashboard'
- */
-        dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: dashboard.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    dashboard.form = dashboardForm

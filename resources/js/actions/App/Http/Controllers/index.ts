@@ -1,6 +1,6 @@
-import Settings from './Settings'
+import MediaController from './MediaController'
 const Controllers = {
-    Settings: Object.assign(Settings, Settings),
+    MediaController: Object.assign(MediaController, MediaController),
 }
 
 export default Controllers

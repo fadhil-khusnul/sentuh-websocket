@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('judul_media');
             $table->string('file_path');
             $table->enum('type', ['gambar', 'video']);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

@@ -11,16 +11,13 @@ const { Dragger } = Upload;
 const ListMedia = ({ mediaList }) => {
   const [api, contextHolder] = notification.useNotification();
 
-  // State Upload
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [localPreview, setLocalPreview] = useState({ url: null, type: null, name: null, rawFile: null });
 
-  // State Modal Preview
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
 
-  // State Modal Edit
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingMedia, setEditingMedia] = useState(null);
   const [form] = Form.useForm();
@@ -75,7 +72,6 @@ const ListMedia = ({ mediaList }) => {
     setUploadProgress(0);
   };
 
-  // --- LOGIC ACTIONS (PLAY, EDIT, DELETE) ---
 
   const handlePlayExisting = (id) => {
     router.post(`/media/${id}/play`, {}, {
@@ -110,7 +106,6 @@ const ListMedia = ({ mediaList }) => {
     });
   };
 
-  // --- TABLE COLUMNS ---
   const columns = [
     {
       title: 'Status',
