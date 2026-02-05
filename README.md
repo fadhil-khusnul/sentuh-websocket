@@ -1,6 +1,5 @@
 # 🖥️ Websocket CMS Laravel (Sentuh.id Test)
-![Project Status](https://img.shields.io/badge/Status-Active-success)
-![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
+![Laravel2(https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
 ![Reverb](https://img.shields.io/badge/WebSocket-Reverb-blueviolet)
 ![Inertia](https://img.shields.io/badge/Inertia.js-purple?logo=inertia)
@@ -45,7 +44,7 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 ## Tech Stack
 
 **Backend:**
-* **Framework:** Laravel 11
+* **Framework:** Laravel 12
 * **Database:** MySQL
 * **Broadcasting:** Laravel Reverb (WebSocket Server)
 
