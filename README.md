@@ -10,22 +10,22 @@
 
 ---
 
-## 📝 Tentang Tugas (Recruitment Task)
+## 📝 Tugas Rekrutmen
 
-Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rekrutmen Sentuh.id untuk saya (Fadhil Khusnul Hakim), berikut detail lainnya:
+Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rekrutmen [sentuh.id](https://sentuh.id) untuk saya (Fadhil Khusnul Hakim), berikut detail lainnya:
 
 
  
 ## 📸 Demo Preview
 
-*(Ganti link di bawah ini dengan link GIF atau Video YouTube demo aplikasi kamu. Contoh: Screenshot dashboard dan Player yang sedang berubah otomatis)*
+[![Tonton Demo Video](https://img.shields.io/badge/▶_Klik_Disini_Untuk_Menonton_Demo-000?style=for-the-badge&logo=youtube&logoColor=red)](https://drive.google.com/file/d/1lNwPQxeWP3EbI10YkjsBdzXDdc7eu3RC/view?usp=sharing)
 
-![Dashboard Screenshot]()
-> *Sistem secara otomatis memicu pemutaran video di player detik itu juga setelah tombol "Play" ditekan di CMS.*
+> *Klik tombol di atas untuk melihat demo sistem
+
 
 ---
 
-## ✨ Fitur
+## Fitur
 
 * 🚀 **Real-time Broadcasting:** Menggunakan Laravel Reverb untuk komunikasi instan antara CMS dan Player.
 * 📂 **Drag & Drop Upload:** Upload media (MP4, JPG, PNG) dengan mudah menggunakan Ant Design Dragger.
@@ -40,7 +40,7 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Backend:**
 * **Framework:** Laravel 11
@@ -59,7 +59,7 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 
 ---
 
-## ⚙️ Persyaratan Sistem
+## Persyaratan Sistem
 
 Sebelum menjalankan, pastikan mesin kamu sudah terinstall:
 * PHP >= 8.2
@@ -69,10 +69,10 @@ Sebelum menjalankan, pastikan mesin kamu sudah terinstall:
 
 ---
 
-## 🚀 Cara Install & Menjalankan
+## Cara Install & Menjalankan
 
 ```bash
-git clone [https://github.com/fadhil-khusnul/sentuh-websocket.git](https://github.com/fadhil-khusnul/sentuh-websocket.git)
+git clone https://github.com/fadhil-khusnul/sentuh-websocket.git
 cd sentuh-websocket
 
 composer update
@@ -80,8 +80,3 @@ composer update
 npm run install
 
 composer run dev
-
-
-
-
-
