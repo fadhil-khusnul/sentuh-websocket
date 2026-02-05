@@ -1,6 +1,6 @@
 # 🖥️ Websocket CMS Laravel (Sentuh.id Test)
-![Laravel2(https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![Laravel12](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![Reverb](https://img.shields.io/badge/WebSocket-Reverb-blueviolet)
 ![Inertia](https://img.shields.io/badge/Inertia.js-purple?logo=inertia)
 
