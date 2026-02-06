@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Button, notification, Card, Table, Tag, Modal, Progress, Typography, Space, Tooltip, Popconfirm, Form, Input, Carousel, Badge, Row, Col, Divider } from 'antd';
-import { EyeOutlined, CheckOutlined, DeleteOutlined, RocketOutlined, PlusOutlined, VideoCameraOutlined, PictureOutlined, UploadOutlined } from '@ant-design/icons';
+import { EyeOutlined, CheckOutlined, DeleteOutlined, RocketOutlined, PlusOutlined, VideoCameraOutlined, PictureOutlined, UploadOutlined, EditOutlined, PlayCircleFilled } from '@ant-design/icons';
 import MainLayout from '../../layouts/MainLayout';
 import axios from 'axios';
 import { router } from '@inertiajs/react';
@@ -16,9 +16,24 @@ const ListMedia = ({ mediaList }) => {
   const [selectedMedia, setSelectedMedia] = useState(null);
 
 
-  const handleApproveAction = (id) => router.post(`/media/approve/${id}`, {}, { onSuccess: () => api.success({ message: 'Disetujui' }) });
+  const handleApproveAndPlay = (id) => {
+    router.post(`/media/approve-play/${id}`, {}, {
+      onSuccess: () => {
+        api.success({ message: 'Sukses!', description: 'Konten disetujui dan ditayangkan.' });
+        setIsPreviewOpen(false);
+      },
+      onError: () => api.error({ message: 'Gagal', description: 'Terjadi kesalahan server.' })
+    });
+  };
+
+
   const handlePlay = (record) => router.post(`/media/${record.id}/play`, {}, { onSuccess: () => api.success({ message: 'Tayang!' }) });
   const handleDelete = (id) => router.delete(`/media/${id}`, { onSuccess: () => api.success({ message: 'Dihapus' }) });
+
+  const openPreview = (record) => {
+    setSelectedMedia(record);
+    setIsPreviewOpen(true);
+  };
 
   const columns = [
     {
@@ -26,9 +41,11 @@ const ListMedia = ({ mediaList }) => {
       key: 'status',
       width: 120,
       render: (_, r) => (
-        <Space direction="vertical" size={ 0 }>
+        <Space>
+
           { r.is_active ? <Tag color="green">PLAYING</Tag> : <Tag>IDLE</Tag> }
-          { r.status === 'pending' ? <Tag color="orange">PENDING</Tag> : <Tag color="blue">APPROVED</Tag> }
+
+          { r.status === 'pending' ? <Tag color="orange">PENDING</Tag> : r.status === 'rejected' ? <Tag color="red">REJECTED</Tag> : <Tag color="blue">APPROVED</Tag> }
         </Space>
       )
     },
@@ -59,19 +76,38 @@ const ListMedia = ({ mediaList }) => {
       key: 'action',
       render: (_, r) => (
         <Space>
-          <Tooltip title="Preview">
-            <Button icon={ <EyeOutlined /> } onClick={ () => { setSelectedMedia(r); setIsPreviewOpen(true); } } />
-          </Tooltip>
+
           { r.status === 'pending' && (
-            <Popconfirm title="Approve?" onConfirm={ () => handleApproveAction(r.id) }>
-              <Button type="primary" ghost icon={ <CheckOutlined /> }>Approve</Button>
-            </Popconfirm>
+            <Space>
+
+              <Popconfirm title="Sebelum Approve Silahkan Preview Terlebih Dahulu?" onConfirm={ () => openPreview(r) }>
+                <Button shape='round' type="primary" ghost icon={ <CheckOutlined /> }>Approve</Button>
+              </Popconfirm>
+              <Popconfirm title='Apakah anda yakin reject konten ini?' onConfirm={ () => router.post(`/media/reject/${r.id}`, {}, {
+                onSuccess: () => {
+                  api.success({ message: 'Konten Ditolak' });
+                },
+                onError: () => {
+                  api.error({ message: 'Gagal Menolak Konten' });
+                }
+              }) }>
+                <Button shape='round' danger>Reject</Button>
+              </Popconfirm>
+            </Space>
           ) }
           { r.status === 'approved' && (
-            <Button type="primary" icon={ <RocketOutlined /> } disabled={ r.is_active } onClick={ () => handlePlay(r) } />
+            <Button shape='circle' type="primary" icon={ <PlayCircleFilled /> } disabled={ r.is_active } onClick={ () => handlePlay(r) } />
           ) }
+          <Tooltip title="Preview">
+            <Button shape='circle' icon={ <EyeOutlined /> } onClick={ () => { setSelectedMedia(r); setIsPreviewOpen(true); } } />
+          </Tooltip>
+
+          <Tooltip title="Edit Konten">
+            <Button shape='circle' icon={ <EditOutlined /> } onClick={ () => router.get(`/media/${r.id}/edit`) } />
+          </Tooltip>
+
           <Popconfirm title="Hapus?" onConfirm={ () => handleDelete(r.id) }>
-            <Button danger icon={ <DeleteOutlined /> } />
+            <Button shape='circle' danger icon={ <DeleteOutlined /> } />
           </Popconfirm>
         </Space>
       )
@@ -89,8 +125,30 @@ const ListMedia = ({ mediaList }) => {
         <Table dataSource={ mediaList } columns={ columns } rowKey="id" pagination={ { pageSize: 5 } } />
       </Card>
 
-      {/* --- MODAL PREVIEW (EXISTING DATA) --- */ }
-      <Modal title="Preview Konten" open={ isPreviewOpen } onCancel={ () => setIsPreviewOpen(false) } footer={ null } width={ 400 }>
+      <Modal
+        title="Preview Konten"
+        open={ isPreviewOpen }
+        onCancel={ () => setIsPreviewOpen(false) }
+        width={ 400 }
+        centered
+
+        footer={
+          <div style={ { display: 'flex', justifyContent: 'center', width: '100%' } }>
+            { selectedMedia && selectedMedia.status !== 'rejected' && (
+              <Button
+                key="approve"
+                type="primary"
+                size="large"
+                icon={ selectedMedia.status === 'pending' ? <CheckOutlined /> : <PlayCircleFilled /> }
+                onClick={ () => handleApproveAndPlay(selectedMedia.id) }
+              >
+                { selectedMedia.status === 'pending' ? 'Approve & Tayangkan' : 'Tayangkan Ulang' }
+              </Button>
+            ) }
+          </div>
+        }
+
+      >
         <div style={ { display: 'flex', justifyContent: 'center' } }>
           { selectedMedia && (
             <PreviewKonten
@@ -103,7 +161,7 @@ const ListMedia = ({ mediaList }) => {
         </div>
       </Modal>
 
-    </MainLayout>
+    </MainLayout >
   );
 };
 

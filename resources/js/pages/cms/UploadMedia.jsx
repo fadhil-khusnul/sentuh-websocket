@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Button, notification, Card, Table, Tag, Modal, Progress, Typography, Space, Tooltip, Popconfirm, Form, Input, Carousel, Badge, Row, Col, Divider } from 'antd';
-import { EyeOutlined, CheckOutlined, DeleteOutlined, RocketOutlined, PlusOutlined, VideoCameraOutlined, PictureOutlined, UploadOutlined, SaveOutlined } from '@ant-design/icons';
+import { Upload, Button, notification, Card, Table, Tag, Modal, Progress, Typography, Space, Tooltip, Popconfirm, Form, Input, Carousel, Badge, Row, Col, Divider, Result } from 'antd';
+import { EyeOutlined, CheckOutlined, DeleteOutlined, RocketOutlined, PlusOutlined, VideoCameraOutlined, PictureOutlined, UploadOutlined, SaveOutlined, ArrowLeftOutlined, UnorderedListOutlined, CloudUploadOutlined } from '@ant-design/icons';
 import MainLayout from '../../layouts/MainLayout';
 import axios from 'axios';
 import { router } from '@inertiajs/react';
@@ -13,6 +13,7 @@ const UploadMedia = () => {
 
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -78,6 +79,7 @@ const UploadMedia = () => {
       form.resetFields();
       setVideoPreviewUrl(null);
       setImageList([]);
+      setIsSuccess(true);
       router.reload({ only: ['mediaList'] });
 
     } catch (err) {
@@ -87,6 +89,15 @@ const UploadMedia = () => {
       setIsUploading(false);
       setUploadProgress(0);
     }
+  };
+
+  const handleReset = () => {
+    form.resetFields();
+    setVideoPreviewUrl(null);
+    setImageList([]);
+    setUploadProgress(0);
+    setIsUploading(false);
+    setIsSuccess(false);
   };
 
   const uploadButton = (
@@ -100,93 +111,130 @@ const UploadMedia = () => {
   return (
     <MainLayout>
       { contextHolder }
-      <Card title="Buat Konten Baru" style={ { marginBottom: 24 } } className="shadow-sm">
-        <Form form={ form } layout="vertical" onFinish={ handleUploadSubmit }>
-          <Row gutter={ 24 }>
 
-            <Col xs={ 24 } md={ 14 }>
-              <Row gutter={ 16 }>
-                <Col span={ 12 }>
-                  <Form.Item label="Judul Konten" name="judul_media" rules={ [{ required: true }] }>
-                    <Input placeholder="Contoh: Promo Ramadhan" />
-                  </Form.Item>
-                </Col>
-                <Col span={ 12 }>
-                  <Form.Item label="Running Text" name="running_text" rules={ [{ required: true }] }>
-                    <Input placeholder="Teks berjalan..." />
-                  </Form.Item>
-                </Col>
-              </Row>
+      { !isSuccess && (
 
-              <Form.Item label="Deskripsi Internal" name="deskripsi">
-                <TextArea rows={ 2 } placeholder="Deskripsi ..." />
-              </Form.Item>
+        <div style={ { marginBottom: 16 } }>
+          <Button icon={ <ArrowLeftOutlined /> } onClick={ () => router.get('/halaman-cms') }>Kembali</Button>
+        </div>
+      ) }
 
-              <Divider titlePlacement="left">Media Assets</Divider>
 
-              <Form.Item
-                label="1. Video Header (MP4)"
-                name="video_file"
-                valuePropName="fileList"
-                getValueFromEvent={ (e) => Array.isArray(e) ? e : e && e.fileList }
+      { isSuccess ? (
+        <Card className="shadow-sm" style={ { minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' } }>
+          <Result
+            status="success"
+            title="Konten Berhasil Diupload!"
+            subTitle="Konten Anda telah disimpan dengan status PENDING. Silakan tunggu approval atau cek daftar media."
+            extra={ [
+              <Button
+                type="primary"
+                key="list"
+                icon={ <UnorderedListOutlined /> }
+                onClick={ () => router.get('/halaman-cms') }
               >
-                <Upload
-                  listType="picture"
-                  maxCount={ 1 }
-                  beforeUpload={ () => false }
-                  accept="video/*"
-                  onChange={ handleVideoChange }
-                >
-                  <Button icon={ <UploadOutlined /> }>Pilih Video</Button>
-                </Upload>
-              </Form.Item>
-
-
-              <Form.Item label="2. Image Slider (Banyak Gambar)" required>
-                <Upload
-                  listType="picture-card"
-                  fileList={ imageList }
-                  onPreview={ (file) => window.open(file.thumbUrl || file.url, '_blank') }
-                  onChange={ handleImageChange }
-                  beforeUpload={ () => false }
-                  accept="image/*"
-                  multiple
-                >
-                  { imageList.length >= 8 ? null : uploadButton }
-                </Upload>
-              </Form.Item>
-
-              { isUploading && <Progress percent={ uploadProgress } status="active" style={ { marginBottom: 10 } } /> }
-
-              <Button type="primary" htmlType="submit" loading={ isUploading } size="large" icon={ <SaveOutlined /> }>
-                Submit
-              </Button>
-            </Col>
-
-            <Col xs={ 24 } md={ 10 }>
-              <Card
-                title="Live Preview"
-                size="small"
-                style={ { background: '#f0f2f5', textAlign: 'center' } }
-                styles={ {
-                  body: {
-                    display: 'flex', justifyContent: 'center', padding: 20
-                  }
-                } }
-
+                Lihat Daftar Media
+              </Button>,
+              <Button
+                key="create"
+                icon={ <CloudUploadOutlined /> }
+                onClick={ handleReset }
               >
-                <PreviewKonten
-                  videoUrl={ videoPreviewUrl }
-                  images={ imageList }
-                  runningText={ watchedRunningText }
-                  title={ watchedTitle }
-                />
+                Buat Konten Lagi
+              </Button>,
+            ] }
+          />
+        </Card>
+      ) : (
 
-              </Card>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+        <Card title="Buat Konten Baru" style={ { marginBottom: 24 } } className="shadow-sm">
+          <Form form={ form } layout="vertical" onFinish={ handleUploadSubmit }>
+            <Row gutter={ 24 }>
+
+              <Col xs={ 24 } md={ 14 }>
+                <Row gutter={ 16 }>
+                  <Col span={ 12 }>
+                    <Form.Item label="Judul Konten" name="judul_media" rules={ [{ required: true }] }>
+                      <Input placeholder="Contoh: Promo Ramadhan" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={ 12 }>
+                    <Form.Item label="Running Text" name="running_text" rules={ [{ required: true }] }>
+                      <Input placeholder="Teks berjalan..." />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Form.Item label="Deskripsi Internal" name="deskripsi">
+                  <TextArea rows={ 2 } placeholder="Deskripsi ..." />
+                </Form.Item>
+
+                <Divider titlePlacement="left">Media Assets</Divider>
+
+                <Form.Item
+                  label="1. Video Header (MP4)"
+                  name="video_file"
+                  valuePropName="fileList"
+                  getValueFromEvent={ (e) => Array.isArray(e) ? e : e && e.fileList }
+                >
+                  <Upload
+                    listType="picture"
+                    maxCount={ 1 }
+                    beforeUpload={ () => false }
+                    accept="video/*"
+                    onChange={ handleVideoChange }
+                  >
+                    <Button icon={ <UploadOutlined /> }>Pilih Video</Button>
+                  </Upload>
+                </Form.Item>
+
+
+                <Form.Item label="2. Image Slider (Banyak Gambar)" required>
+                  <Upload
+                    listType="picture-card"
+                    fileList={ imageList }
+                    onPreview={ (file) => window.open(file.thumbUrl || file.url, '_blank') }
+                    onChange={ handleImageChange }
+                    beforeUpload={ () => false }
+                    accept="image/*"
+                    multiple
+                  >
+                    { imageList.length >= 8 ? null : uploadButton }
+                  </Upload>
+                </Form.Item>
+
+                { isUploading && <Progress percent={ uploadProgress } status="active" style={ { marginBottom: 10 } } /> }
+
+                <Button type="primary" htmlType="submit" loading={ isUploading } size="large" icon={ <SaveOutlined /> }>
+                  Submit
+                </Button>
+              </Col>
+
+              <Col xs={ 24 } md={ 10 }>
+                <Card
+                  title="Live Preview"
+                  size="small"
+                  style={ { background: '#f0f2f5', textAlign: 'center' } }
+                  styles={ {
+                    body: {
+                      display: 'flex', justifyContent: 'center', padding: 20
+                    }
+                  } }
+
+                >
+                  <PreviewKonten
+                    videoUrl={ videoPreviewUrl }
+                    images={ imageList }
+                    runningText={ watchedRunningText }
+                    title={ watchedTitle }
+                  />
+
+                </Card>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
+      ) }
 
     </MainLayout>
   );
