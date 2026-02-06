@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
 export const player = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ player.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
 player.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ player.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
 player.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ player.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
 player.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,7 +44,7 @@ player.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
     /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
     const playerForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -54,7 +54,7 @@ player.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
             /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
         playerForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -63,7 +63,7 @@ player.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
         })
             /**
 * @see \App\Http\Controllers\MediaController::player
- * @see app/Http/Controllers/MediaController.php:90
+ * @see app/Http/Controllers/MediaController.php:228
  * @route '/ds-player'
  */
         playerForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

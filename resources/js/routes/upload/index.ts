@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\MediaController::media
- * @see app/Http/Controllers/MediaController.php:29
+ * @see app/Http/Controllers/MediaController.php:37
  * @route '/upload-media'
  */
 export const media = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ media.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::media
- * @see app/Http/Controllers/MediaController.php:29
+ * @see app/Http/Controllers/MediaController.php:37
  * @route '/upload-media'
  */
 media.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ media.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::media
- * @see app/Http/Controllers/MediaController.php:29
+ * @see app/Http/Controllers/MediaController.php:37
  * @route '/upload-media'
  */
 media.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ media.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
     /**
 * @see \App\Http\Controllers\MediaController::media
- * @see app/Http/Controllers/MediaController.php:29
+ * @see app/Http/Controllers/MediaController.php:37
  * @route '/upload-media'
  */
     const mediaForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ media.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
             /**
 * @see \App\Http\Controllers\MediaController::media
- * @see app/Http/Controllers/MediaController.php:29
+ * @see app/Http/Controllers/MediaController.php:37
  * @route '/upload-media'
  */
         mediaForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

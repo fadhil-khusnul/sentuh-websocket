@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
 export const playlist = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ playlist.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
 playlist.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ playlist.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
 playlist.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ playlist.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
 playlist.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,7 +44,7 @@ playlist.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
     /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
     const playlistForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -54,7 +54,7 @@ playlist.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
             /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
         playlistForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -63,7 +63,7 @@ playlist.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
         })
             /**
 * @see \App\Http\Controllers\MediaController::playlist
- * @see app/Http/Controllers/MediaController.php:95
+ * @see app/Http/Controllers/MediaController.php:233
  * @route '/get-playlist'
  */
         playlistForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
