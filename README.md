@@ -4,7 +4,7 @@
 ![Reverb](https://img.shields.io/badge/WebSocket-Reverb-blueviolet)
 ![Inertia](https://img.shields.io/badge/Inertia.js-purple?logo=inertia)
 
-**Sistem ini** memanfaatkan teknologi **WebSocket menggunakan (Laravel Reverb)** untuk mengirimkan konten media (Video/Gambar) dari panel admin ke layar player secara **Real-time** tanpa perlu refresh page
+**Sistem ini** memanfaatkan teknologi **WebSocket menggunakan (Laravel Reverb)** untuk mengirimkan konten media (Video/Gambar Slider) dan Running Text dari cms panel ke layar player secara **Real-time** tanpa perlu refresh page
 
 ---
 
@@ -15,11 +15,9 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 
  
 ## 📸 Demo Preview
-<img width="1916" height="913" alt="image" src="https://github.com/user-attachments/assets/e9661c4c-05b2-4d93-b963-352e53597f52" />
+<img width="50%" height="50%" alt="image" src="https://github.com/user-attachments/assets/109c3dee-f347-4981-8724-c2c451b5327c" /> <img width="48%" height="48%" alt="image" src="https://github.com/user-attachments/assets/8710065f-8bd2-426a-b458-e2e346340da9" />
 
-
-
-[![Tonton Demo Video](https://img.shields.io/badge/▶_Klik_Disini_Untuk_Menonton_Demo-000?style=for-the-badge&logo=youtube&logoColor=red)](https://drive.google.com/file/d/1lNwPQxeWP3EbI10YkjsBdzXDdc7eu3RC/view?usp=sharing)
+[![Tonton Demo Video](https://img.shields.io/badge/▶_Klik_Disini_Untuk_Menonton_Demo-000?style=for-the-badge&logo=youtube&logoColor=red)](https://drive.google.com/file/d/1QVydlsqsf_Gfbl9CcZzjFc1W0u5faO4_/view?usp=sharing)
 
 > *Klik tombol di atas untuk melihat demo sistem
 
@@ -31,13 +29,14 @@ Project ini dibuat untuk memenuhi persyaratan teknis yang diberikan oleh tim rek
 * 🚀 **Real-time Broadcasting:** Menggunakan Laravel Reverb untuk komunikasi instan antara CMS dan Player.
 * 📂 **Drag & Drop Upload:** Upload media (MP4, JPG, PNG) dengan mudah menggunakan Ant Design Dragger.
 * 📺 **Media Player:**
-    * Auto-play & Loop.
-    * Indikator status "Now Playing" dan "Downloading".
-* 🔔 **Live Notifications:** Notifikasi interaktif di layar player saat konten baru diterima.
+    * Realtime Notifaction.
+    * Video Auto-play & Loop.
+    * Image Slider
+    * Running Text
+* 🔔 **Live Notifications:** Notifikasi interaktif di layar player saat konten baru dibuat/diapprove/delete/update/reject.
 * 🛠️ **CMS Management:**
-    * Playlist Management (Edit, Delete).
-    * Tombol "Push to Screen" untuk memutar ulang konten lama.
-    * Status indikator aktif (Playing/Idle).
+    * Fitur Aksi Approve/Rejected/Preview/Play/Edit/Delete
+    * Status indikator aktif (Playing/Idle dan Approve/Reject/Pending).
 
 ---
 
